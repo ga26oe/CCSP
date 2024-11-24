@@ -11,8 +11,8 @@ class SudokoDigit(NamedTuple):
     row: int
     column: int
     
-def generate_domain(digit: SudokoDigit, grid: Board) -> List[List[GridLocation]]:
-    domain: List[List[GridLocation]] = []
+def generate_domain(digit: SudokoDigit, grid: Board) -> List[GridLocation]: #! Changed from List[List{GridLocation}]
+    domain: List[GridLocation] = []
     board_row_size: int = len(grid)
     board_col_size: int = len(grid[0])
     #! The places in the board that have a 0 are assumed as empty!
@@ -27,7 +27,7 @@ class SudokoConstraint(Constraint[int, List[GridLocation]]):
     def __init__(self, digits: List[int]) -> None:
         super().__init__(digits)
         self.digits: List[int] = digits
-    def satisfied(self, assignment: Dict[int, List[GridLocation]]) -> bool:
+    def satisfied(self, assignment: Dict[GridLocation, int]) -> bool: #? Changed from Dict[int, List[GridLocation]]
         #! Can't be the same digit in the row, column or the accompanying 3x3 box
         all_locations = [locs for values in assignment.values() for locs in values]
         return len(set(all_locations)) == len(all_locations)        
@@ -41,4 +41,4 @@ test_board: Board = [
 test_digit = SudokoDigit(name='5', row =0, column=0)
 result = generate_domain(test_digit, test_board)
 
-print(result)
+print(result) 
