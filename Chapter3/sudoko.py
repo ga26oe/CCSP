@@ -11,6 +11,43 @@ class SudokoDigit(NamedTuple):
     row: int
     column: int
     
+#* ---------- Helper Functions ---------- 
+def get_box_number(row, col) -> int:
+    box_row = row // 3
+    box_col = col // 3
+    box_number = box_row * 3 + box_col
+    return box_number
+
+def get_positions_in_same_row(position) -> List[GridLocation]:
+    #current_position = GridLocation(position)  #! Don't Need the Line!, position is already in use
+    available_row_positions = [GridLocation(position.row, col) for col in range(9) 
+                               if col != position.column]
+    return available_row_positions
+
+def get_positions_in_same_column(position) -> List[GridLocation]:
+    #current_position = GridLocation(position)  #! Don't Need the Line!, position is already in use
+    available_col_positions = [GridLocation(row, position.col) for row in range(9) 
+                               if row != position.row]
+    return available_col_positions
+
+def get_positions_in_same_box(position: GridLocation) -> List[GridLocation]:
+    #current_position = GridLocation(position)  #! Don't Need the Line!, position is already in use
+    box_number =  get_box_number(position.row, position.column)
+    starting_row = (box_number // 3) * 3
+    starting_col = (box_number % 3 ) * 3
+    
+    available_box_positions = [
+        GridLocation(row, col)
+        for row in range(starting_row, starting_row + 3)
+        for col in range(starting_col, starting_col + 3)
+        if GridLocation(row, col) != position   
+    ]
+    
+    return available_box_positions
+ 
+
+#* ---------- Helper Functions ----------
+    
 def generate_domain(digit: SudokoDigit, grid: Board) -> List[GridLocation]: #! Changed from List[List{GridLocation}]
     domain: List[GridLocation] = []
     board_row_size: int = len(grid)
@@ -29,8 +66,8 @@ class SudokoConstraint(Constraint[int, List[GridLocation]]):
         self.digits: List[int] = digits
     def satisfied(self, assignment: Dict[GridLocation, int]) -> bool: #? Changed from Dict[int, List[GridLocation]]
         #! Can't be the same digit in the row, column or the accompanying 3x3 box
-        all_locations = [locs for values in assignment.values() for locs in values]
-        return len(set(all_locations)) == len(all_locations)        
+        #todo -- Need different sub-methods - check_rows(); check_columns(); check_boxes();
+        pass      
 
 
 test_board: Board = [
