@@ -27,7 +27,8 @@ Sudoku Constraint Development Guide
    - What should the values represent?
      - The values could represent the position in the board
    - Would a different structure make rule checking easier?
-     - Best python data structure to represent a sudoko board?
+     - A 2D array is probably the best structure to represent the sudoko board and a
+       a dictionay would be the best for listing potential locations since lookup is fast
 
 ### Algorithm Questions
 
@@ -77,6 +78,9 @@ Sudoku Constraint Development Guide
    - get_positions_in_same_row(position)
    - get_positions_in_same_column(position)
    - get_positions_in_same_box(position)
+     - starting_row = (box_number // 3) \* 3
+     - starting_col = (box_number % 3) \* 3
+     - Division by 3 gives us the Row, and mod 3 gives us the column
 
 3. Consider edge cases:
    - Empty grid
